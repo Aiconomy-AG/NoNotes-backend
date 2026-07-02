@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => array_values(array_filter(array_map('trim', explode(',', env(
         'FRONTEND_URLS',
-        env('FRONTEND_URL', 'http://localhost:4173')
+        env('FRONTEND_URL')
     ))))),
 
     'allowed_origins_patterns' => [
