@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,23 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function register(Request $request)
+    {
+        $credentials = $request->validate([
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = User::create($credentials);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json([
+            'user' => $user,
+        ], 201);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
