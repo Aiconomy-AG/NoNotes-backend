@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'mcp' => [
+        'storage_secret' => env('MCP_STORAGE_SECRET', ''),
+    ],
+
 ];
