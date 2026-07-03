@@ -10,7 +10,7 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'blocks'];
+    protected $fillable = ['title', 'blocks', 'folder_id', 'sort_order'];
 
     protected $casts = [
         'blocks' => 'array',
@@ -19,5 +19,10 @@ class Note extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function folder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class);
     }
 }

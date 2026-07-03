@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FolderController;
 use App\Http\Controllers\Api\McpOAuthStorageController;
 use App\Http\Controllers\Api\McpTokenController;
 use App\Http\Controllers\Api\NoteController;
@@ -30,6 +31,7 @@ Route::prefix('/mcp/oauth-storage')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::apiResource('folders', FolderController::class)->except(['show']);
     Route::apiResource('notes', NoteController::class)->except(['show']);
 
 });
