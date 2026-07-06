@@ -4,11 +4,17 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FolderController;
 use App\Http\Controllers\Api\McpOAuthStorageController;
 use App\Http\Controllers\Api\McpTokenController;
+use App\Http\Controllers\Api\MobileAuthController;
 use App\Http\Controllers\Api\NoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+Route::prefix('/mobile')->middleware('throttle:10,1')->group(function () {
+    Route::post('/login', [MobileAuthController::class, 'login']);
+    Route::post('/register', [MobileAuthController::class, 'register']);
+});
 
 // Issues a Sanctum personal access token from credentials for the MCP server.
 // Throttled since it accepts raw credentials without a session.
@@ -29,14 +35,14 @@ Route::prefix('/mcp/oauth-storage')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::delete('/mobile/logout', [MobileAuthController::class, 'logout']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::apiResource('folders', FolderController::class)->except(['show']);
     Route::apiResource('notes', NoteController::class)->except(['show']);
-
 });
-Route::get('/test', function(){
+Route::get('/test', function () {
     return response()->json([
-        'message' => 'Backend working, hopefully...'
+        'message' => 'Backend working, hopefully...',
     ]);
 });
